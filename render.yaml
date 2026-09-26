@@ -1,0 +1,42 @@
+# Render Blueprint: deploys the API and the React frontend in one go.
+# Render dashboard -> New -> Blueprint -> select this repository.
+# Values marked `sync: false` are prompted for during setup (never committed).
+services:
+  - type: web
+    name: support-ticket-api
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 1d
+      - key: DATABASE_URL          # mysql://user:password@host:port/dbname
+        sync: false
+      - key: DB_SSL
+        value: "true"
+      - key: DB_SSL_CA             # contents of the provider's ca.pem (Aiven)
+        sync: false
+      - key: CORS_ORIGIN           # e.g. https://support-ticket-web.onrender.com
+        sync: false
+
+  - type: web
+    name: support-ticket-web
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    routes:
+      # Single-page app: let React Router handle every path
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL          # e.g. https://support-ticket-api.onrender.com/api
+        sync: false
