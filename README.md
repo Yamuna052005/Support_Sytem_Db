@@ -4,8 +4,8 @@ A full-stack support portal where **customers** raise and track support tickets 
 
 | | |
 |---|---|
-| **Live app** | `https://<your-frontend>.onrender.com` *(fill in after deploying)* |
-| **API** | `https://<your-api>.onrender.com/api` *(fill in after deploying)* |
+| **Live app** | `support-sytem-db.vercel.app`  |
+| **API** | `https://<your-api>.onrender.com/api`  |
 | **Health check** | `GET /api/health` |
 
 **Demo accounts** (all use the password `Password123!`):
